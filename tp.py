@@ -2,3 +2,5 @@
 
 def menuPrincipal():
   blablabla
+  if blablabla == blablabla:
+    return hola
