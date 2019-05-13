@@ -1,6 +1,6 @@
 def imprimirMenuPrincipal():
 	print("\n\n***** MENU PRINCIPAL *****")
-	print("\n1. Carga de datos")#\n**** a. Carga automática\n**** b. Carga automática aleatoria")
+	print("1. Carga de datos")#\n**** a. Carga automática\n**** b. Carga automática aleatoria")
 	print("2. Usuarios")#\n**** a. Listado\n**** b. Alta\n**** c. Modificación\n**** d. Desbloquear")
 	print("3. Retiros automáticos")#\n**** a. Viaje aleatorio\n**** b. Viajes aleatorios múltiples")
 	print("4. Informes")#\n**** a. Usuarios con mayor cantidad de viajes\n**** b. Usuarios con mayor duración acumulada de viajes\n**** c. Bicicletas en reparación\n**** d. Estaciones más activas")
