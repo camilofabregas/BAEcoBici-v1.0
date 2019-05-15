@@ -1,7 +1,6 @@
-#ESTE ES EL CÓDIGO DEL TP1
-# Gente, soy Erne. Se me murió el celu ayer y por unos dias voy a estar sin. Asi que si quieren ir viendo el tp avisen por aca o por mail.
-
 from imprimirMenus import *
+from generarEstructuras import *
+import random
 
 def menuPrincipal():
 	opcionElegida = 0
@@ -38,7 +37,7 @@ def calcularRangoSubmenuElegido(opcionElegida):
 
 def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu):
 	if opcionElegida == 1 and opcionSubmenu == 1:
-		cargaAutomatica()
+		usuarios, bicicletas, estaciones = cargaAutomatica()
 	elif opcionElegida == 1 and opcionSubmenu == 2:
 		cargaAutomaticaAleatoria()
 	elif opcionElegida == 2 and opcionSubmenu == 1:
@@ -63,8 +62,11 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu):
 		estacionesMasActivas()
 
 def cargaAutomatica():
-	print("CARGA AUTOMATICA")
-	print("FIN DEL PROGRAMA")
+	usuarios = generarUsuarios() # En el módulo generarEstructuras
+	bicicletas = generarBicicletas() # En el módulo generarEstructuras
+	estaciones = generarEstaciones() # En el módulo generarEstructuras
+	print("\n\n[INFO] Se ha realizado una carga de datos de usuarios, bicicletas y estaciones predefinidas.\nVolviendo al submenú de carga de datos...")
+	return usuarios, bicicletas, estaciones
 
 def menuUsuario():
 	print("**** MENU USUARIO *****")
