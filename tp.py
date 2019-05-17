@@ -2,12 +2,18 @@ from imprimirMenus import *
 from generarEstructuras import *
 import random
 
-def menuPrincipal():
+def main():
+	usuarios, bicicletas, estaciones = dict(), dict(), dict() # Defino los diccionarios vacíos.
+	imprimirLogo() # En el módulo menuYSubmenus
+	menuPrincipal(usuarios, bicicletas, estaciones)
+
+
+def menuPrincipal(usuarios, bicicletas, estaciones):
 	opcionElegida = 0
 	while opcionElegida != 6:
 		imprimirMenuPrincipal() # En el módulo menuYSubmenus
 		opcionElegida = ingresarEntreRangos(1,6,"Ingrese el número de opción (1 a 6): ")
-		submenuElegido(opcionElegida)
+		submenuElegido(opcionElegida, usuarios, bicicletas, estaciones)
 
 def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una opción dentro de un rango especifico.
 	opcion = input(mensaje)
@@ -16,14 +22,14 @@ def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una op
 		opcion = input(mensaje)
 	return int(opcion)
 
-def submenuElegido(opcionElegida): # Genera el submenu de la opción que elegí en el menu principal
+def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones): # Genera el submenu de la opción que elegí en el menu principal
 	if opcionElegida != 5 and opcionElegida != 6: # Si no es "Salir del programa" o "Ingresar al sistema"
 		rangoSubmenuElegido = calcularRangoSubmenuElegido(opcionElegida)
 		opcionSubmenu = 0
 		while opcionSubmenu != rangoSubmenuElegido:
 			imprimirSubmenuElegido(opcionElegida) # En el módulo menuYSubmenus
 			opcionSubmenu = ingresarEntreRangos(1,rangoSubmenuElegido,"Ingrese el número de opción (1 a {}): ".format(rangoSubmenuElegido))
-			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu)
+			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones)
 	elif opcionElegida == 5:
 		menuUsuario()
 
@@ -35,15 +41,17 @@ def calcularRangoSubmenuElegido(opcionElegida):
 	elif opcionElegida == 4:
 		return 4
 
-def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu):
+def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones):
 	if opcionElegida == 1 and opcionSubmenu == 1:
-		usuarios, bicicletas, estaciones = cargaAutomatica()
+		cargaAutomatica(usuarios, bicicletas, estaciones)
+		print(usuarios)
 	elif opcionElegida == 1 and opcionSubmenu == 2:
 		cargaAutomaticaAleatoria()
 	elif opcionElegida == 2 and opcionSubmenu == 1:
 		listado()
 	elif opcionElegida == 2 and opcionSubmenu == 2:
-		alta()
+		alta(usuarios)
+		print(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 3:
 		modificacion()
 	elif opcionElegida == 2 and opcionSubmenu == 4:
@@ -61,17 +69,25 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu):
 	elif opcionElegida == 4 and opcionSubmenu == 4:
 		estacionesMasActivas()
 
-def cargaAutomatica():
-	usuarios = generarUsuarios() # En el módulo generarEstructuras
-	bicicletas = generarBicicletas() # En el módulo generarEstructuras
-	estaciones = generarEstaciones() # En el módulo generarEstructuras
+def cargaAutomatica(usuarios, bicicletas, estaciones):
+	generarUsuarios(usuarios) # En el módulo generarEstructuras
+	generarBicicletas(bicicletas) # En el módulo generarEstructuras
+	generarEstaciones(estaciones) # En el módulo generarEstructuras
 	print("\n\n[INFO] Se ha realizado una carga de datos de usuarios, bicicletas y estaciones predefinidas.\nVolviendo al submenú de carga de datos...")
-	return usuarios, bicicletas, estaciones
+
+def alta(usuarios):
+	dni = int(input("Ingrese su DNI: "))
+	if dni in usuarios:
+		print("El usuario ya está en el sistema. Volviendo al menu principal.")
+	else:
+		pin = input("Ingrese un PIN de 4 dígitos: ")
+		nombre = input("Ingrese su nombre: ")
+		apellido = input("Ingrese su apellido: ")
+		celular = input("Ingrese su celular: ")
+		usuarios[dni] = [pin, nombre.lower() + "_" + apellido.lower(), celular]
 
 def menuUsuario():
 	print("**** MENU USUARIO *****")
 	print("FIN DEL PROGRAMA")
 
-
-imprimirLogo() # En el módulo menuYSubmenus
-menuPrincipal()
+main()
