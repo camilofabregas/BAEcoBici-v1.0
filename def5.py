@@ -1,4 +1,3 @@
-    
 import random
 
 def generarUsuarios():
@@ -19,7 +18,7 @@ def imprimirUsuariosBloqueados (usuarios):
     for usuario in usuarios:
         if usuarios[usuario][0] == "-": #Filtro del diccionario los usarios bloqueados
             cantidadUsuariosBloqueados += 1
-            print("{}. {}".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice y nombre de usuario, Ej: 1. Ernesto
+            print("{}. {}".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
     return cantidadUsuariosBloqueados
 
 def generarPin():
@@ -33,17 +32,15 @@ def generarPin():
 def desbloquear (usuarios, cantidadUsuariosBloqueados, nuevoPin):
     seguir = "s"
     while seguir == "s":
-        usuarioElegido = int(input("Eliga el número del usuario que desea desbloquear: "))
-        while usuarioElegido <= 0 or usuarioElegido > cantidadUsuariosBloqueados:
-            usuarioElegido = int(input("[ERROR] Debe ingresar un número dentro del listado: "))
+        usuarioElegido = int(input("Ingrese el DNI del usuario a desbloquear: "))
+        while usuarioElegido not in usuarios:
+            usuarioElegido = int(input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
         for dni in usuarios:
-            if usuarios[dni][0] == "-":
+            if dni == usuarioElegido and usuarios[dni][0] == "-":
                 usuarios[dni][0] = nuevoPin
-        print("[INFO] Usuario desbloqueado exitosamente.")
+                print("[INFO] Usuario desbloqueado exitosamente. Se le generó el pin {}, a {}.".format(nuevoPin, usuarios[dni][1]))
         seguir = input('¿Desea desbloquear otro usuario? (s/n): ')
     print("[INFO] Volviendo al submenu...")
-    print(nuevoPin) #Con este print ven el pin que se genera
-    print (usuarios) #Aca fijense que le cambia al pin, no al que elegí, sino a todos los que tenían "-"
 
 usuarios = generarUsuarios()
 imprimir = imprimirUsuariosBloqueados(usuarios)
