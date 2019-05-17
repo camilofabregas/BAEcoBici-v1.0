@@ -76,15 +76,6 @@ def cargaAutomatica(usuarios, bicicletas, estaciones):
 	print("\n\n[INFO] Se ha realizado una carga de datos de usuarios, bicicletas y estaciones predefinidas.\nVolviendo al submenú de carga de datos...")
 
 def alta(usuarios):
-	dni = int(input("Ingrese su DNI: "))
-	if dni in usuarios:
-		print("El usuario ya está en el sistema. Volviendo al menu principal.")
-	else:
-		pin = input("Ingrese un PIN de 4 dígitos: ")
-		nombre = input("Ingrese su nombre: ")
-		apellido = input("Ingrese su apellido: ")
-		celular = input("Ingrese su celular: ")
-		usuarios[dni] = [pin, nombre.lower() + "_" + apellido.lower(), celular]
 
 def menuUsuario():
 	print("**** MENU USUARIO *****")
