@@ -18,7 +18,7 @@ def imprimirUsuariosBloqueados (usuarios):
     for usuario in usuarios:
         if usuarios[usuario][0] == "-": #Filtro del diccionario los usarios bloqueados
             cantidadUsuariosBloqueados += 1
-            print("{}. {}".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
+            print("{}. {}, DNI = ".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
     return cantidadUsuariosBloqueados
 
 def generarPin():
@@ -29,20 +29,23 @@ def generarPin():
     nuevoPin = num + num2 + num3 + num4 
     return nuevoPin
 
-def desbloquear (usuarios, cantidadUsuariosBloqueados, nuevoPin):
+def desbloquear (usuarios, cantidadUsuariosBloqueados):
     seguir = "s"
     while seguir == "s":
         usuarioElegido = int(input("Ingrese el DNI del usuario a desbloquear: "))
-        while usuarioElegido not in usuarios:
+        while usuarioElegido not in Usuarios:
             usuarioElegido = int(input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
         for dni in usuarios:
+            while dni == usuarioElegido and usuarios[dni][0] != "-":
+                usuarioElegido = int(input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
+        for dni in usuarios:        
             if dni == usuarioElegido and usuarios[dni][0] == "-":
-                usuarios[dni][0] = nuevoPin
-                print("[INFO] Usuario desbloqueado exitosamente. Se le generó el pin {}, a {}.".format(nuevoPin, usuarios[dni][1]))
+                usuarios[dni][0] = generarPin()
+                print("[INFO] Usuario desbloqueado exitosamente. Se le generó el pin {}, a {}.".format(usuarios[dni][0], usuarios[dni][1]))
         seguir = input('¿Desea desbloquear otro usuario? (s/n): ')
     print("[INFO] Volviendo al submenu...")
+    print(usuarios)
 
 usuarios = generarUsuarios()
 imprimir = imprimirUsuariosBloqueados(usuarios)
-nuevoPin = generarPin()
-desbloquear(usuarios, imprimir, nuevoPin)
+desbloquear(usuarios, imprimir)
