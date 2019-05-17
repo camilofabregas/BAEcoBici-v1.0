@@ -23,3 +23,10 @@ def imprimirSubmenuElegido(opcionElegida):
 		print("\n\n**** RETIROS AUTOMÁTICOS ****\n    1. Viaje aleatorio\n    2. Viajes aleatorios múltiples\n    3. Volver al menu principal")
 	elif opcionElegida == 4:
 		print("\n\n**** INFORMES ****\n    1. Usuarios con mayor cantidad de viajes\n    2. Usuarios con mayor duración acumulada de viajes\n    3. Bicicletas en reparación\n    4. Estaciones más activas\n    5. Volver al menu principal")
+
+def imprimirMenuUsuario():
+	print("\n\n**** MENU DEL USUARIO *****")
+	print("1. Modificar PIN")
+	print("2. Retirar bicicleta")
+	print("3. Devolver bicicleta")
+	print("4. Volver al menu principal")
