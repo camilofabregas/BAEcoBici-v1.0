@@ -17,7 +17,7 @@ def imprimirUsuariosBloqueados (usuarios):
     for usuario in usuarios:
         if usuarios[usuario][0] == "-": #Filtro del diccionario los usarios bloqueados
             cantidadUsuariosBloqueados += 1
-            print("{}. {}, DNI = ".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
+            print("{}. {}, DNI: ".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
     return cantidadUsuariosBloqueados
 
 def generarPin():
@@ -32,7 +32,7 @@ def desbloquear (usuarios, cantidadUsuariosBloqueados):
     seguir = "s"
     while seguir == "s":
         usuarioElegido = int(input("Ingrese el DNI del usuario a desbloquear: "))
-        while usuarioElegido not in Usuarios:
+        while usuarioElegido not in usuarios:
             usuarioElegido = int(input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
         for dni in usuarios:
             while dni == usuarioElegido and usuarios[dni][0] != "-":
