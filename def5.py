@@ -17,7 +17,7 @@ def imprimirUsuariosBloqueados (usuarios):
     for usuario in usuarios:
         if usuarios[usuario][0] == "-": #Filtro del diccionario los usarios bloqueados
             cantidadUsuariosBloqueados += 1
-            print("{}. {}, DNI: ".format(cantidadUsuariosBloqueados, usuarios[usuario][1])) #imprimo indice, nombre de usuario
+            print("{}. {}, DNI: {}".format(cantidadUsuariosBloqueados, usuarios[usuario][1], usuario)) #imprimo indice, nombre de usuario
     return cantidadUsuariosBloqueados
 
 def generarPin():
