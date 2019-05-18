@@ -13,7 +13,6 @@ def generarUsuarios():
 
 def imprimirUsuariosBloqueados (usuarios):
     cantidadUsuariosBloqueados = 0 #Indice para imprimir ordenado
-    seguir = "s"
     print("**** Usuarios Bloqueados ****")
     for usuario in usuarios:
         if usuarios[usuario][0] == "-": #Filtro del diccionario los usarios bloqueados
