@@ -14,7 +14,7 @@ def generarEstacionesRandom(estaciones, bicicletas):
     capacidad = [30, 25, 20, 30, 30, 25, 30, 15, 25, 30, 25]
     for dato1, dato2, dato3, dato4 in zip(identificador, direcciones, latitudLongitud, capacidad):
         estaciones[dato1] = {"Dirección": dato2, "Latitud y longitud": dato3, "Capacidad": dato4,}
-
+#Acá no carga todas las bicis a los anclajes
     '''bicis = list(bicicletas.keys())
     for idEstacion in estaciones:
         estaciones[idEstacion]["Anclajes"] = []
@@ -26,7 +26,7 @@ def generarEstacionesRandom(estaciones, bicicletas):
             print('cantidad = {}'.format(len(bicis)))
     print(estaciones)'''
 
-
+#Acá me guarda todas las bicis en un anclaje
     bicis = list(bicicletas.keys())
     for idEstacion in estaciones:
         estaciones[idEstacion]["Anclajes"] = []
