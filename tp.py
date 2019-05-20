@@ -13,13 +13,13 @@ def menuPrincipal(usuarios, bicicletas, estaciones):
 	opcionElegida = 0
 	while opcionElegida != 6:
 		imprimirMenuPrincipal() # En el módulo menuYSubmenus
-		opcionElegida = ingresarEntreRangos(1,6,"Ingrese el número de opción (1 a 6): ")
+		opcionElegida = ingresarEntreRangos(1,6,"[SOLICITUD] Ingrese el número de opción (1 a 6): ")
 		submenuElegido(opcionElegida, usuarios, bicicletas, estaciones)
 
 def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una opción dentro de un rango especifico.
 	opcion = input(mensaje)
 	while not opcion.isdigit() or int(opcion) < inicio or int(opcion) > fin:
-		print("\nERROR: debe estar dentro del rango especificado.")
+		print("\n[ERROR] Debe estar dentro del rango especificado.")
 		opcion = input(mensaje)
 	return int(opcion)
 
@@ -44,9 +44,9 @@ def calcularRangoSubmenuElegido(opcionElegida):
 
 def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones):
 	if opcionElegida == 1 and opcionSubmenu == 1:
-		cargaAutomatica(usuarios, bicicletas, estaciones)
+		cargarDatos(usuarios, bicicletas, estaciones, "predefinida")
 	elif opcionElegida == 1 and opcionSubmenu == 2:
-		cargaAutomaticaAleatoria()
+		cargarDatos(usuarios, bicicletas, estaciones, "aleatoria") # Idem pero cambia la distribución de bicicletas.
 	elif opcionElegida == 2 and opcionSubmenu == 1:
 		listado()
 	elif opcionElegida == 2 and opcionSubmenu == 2:
@@ -68,24 +68,12 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 4 and opcionSubmenu == 4:
 		estacionesMasActivas()
 
-def cargaAutomatica(usuarios, bicicletas, estaciones):
+def cargarDatos(usuarios, bicicletas, estaciones, tipoDeCarga):
 	generarUsuarios(usuarios) # En el módulo generarEstructuras
 	generarBicicletas(bicicletas) # En el módulo generarEstructuras
-	generarEstaciones(estaciones) # En el módulo generarEstructuras
-	print("\n\n[INFO] Se ha realizado una carga de datos de usuarios, bicicletas y estaciones predefinidas.\nVolviendo al submenú de carga de datos...")
+	generarEstaciones(estaciones, bicicletas, tipoDeCarga) # En el módulo generarEstructuras
+	print("\n\n[INFO] Se ha realizado una carga automática {} de datos de usuarios, bicicletas y estaciones.\nVolviendo al submenú de carga de datos...".format(tipoDeCarga))
 
-"""
-def alta(usuarios):
-	dni = int(input("Ingrese su DNI: "))
-	if dni in usuarios:
-		print("El usuario ya está en el sistema. Volviendo al menu principal.")
-	else:
-		pin = input("Ingrese un PIN de 4 dígitos: ")
-		nombre = input("Ingrese su nombre: ")
-		apellido = input("Ingrese su apellido: ")
-		celular = input("Ingrese su celular: ")
-		usuarios[dni] = [pin, nombre.lower() + "_" + apellido.lower(), celular]
-"""
 def alta(usuarios):
 	print(usuarios)
 	dni = int(solicitarValidarDigitos(7, 8, "[SOLICITUD] Ingrese su DNI (sin puntos ni espacios): "))
@@ -97,9 +85,7 @@ def alta(usuarios):
 		usuarios[dni] = [pin, nombre + "_" + apellido, celular] 
 		return usuarios
 	else:
-		print('[ERROR] El DNI ingresado ya se asociado a una cuenta en el sistema. Volviendo al menú principal...')
-		# aca deberia darle la opcion de volver manualmente porque sino apenas imprime 
-		# sale al menu principal sin dejar leer el mensaje
+		print("\n\n[ERROR] El DNI ingresado ya se asociado a una cuenta en el sistema. Volviendo al menú principal...")
 
 def modificacion (usuarios):
 	opcionElegida = 0 
@@ -131,15 +117,14 @@ def modificacion (usuarios):
 						print ("[INFO] Operacion cancelada. Volviendo al menu de modificacion...\n")
 			else:
 				print ("El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificacion... \n")
-		#print(usuarios)	
-		
+
 def menuUsuario(usuarios):
 	dni, pin = iniciarSesion(usuarios) 
 	if dni != 0:
 		opcionElegida = 0
 		while opcionElegida != 4:
 			imprimirMenuUsuario()
-			opcionElegida = ingresarEntreRangos(1,4,"Ingrese el número de opción (1 a 4): ")
+			opcionElegida = ingresarEntreRangos(1,4,"[SOLICITUD] Ingrese el número de opción (1 a 4): ")
 			submenuUsuario(usuarios, opcionElegida, dni, pin)
 
 def iniciarSesion(usuarios):
@@ -161,7 +146,6 @@ def submenuUsuario(usuarios, opcionElegida, dni, pin):
 		retirarBicicleta()
 	elif opcionElegida == 3:
 		devolverBicicleta()
-	print(usuarios)
 
 def cambiarPin(usuarios, dni, pinViejo):
 	print("\n")
@@ -174,7 +158,7 @@ def cambiarPin(usuarios, dni, pinViejo):
 		print("\n[ERROR] Los pines no coinciden, intente de nuevo...")
 		pinNuevoRepetido = solicitarValidarDigitos(4, 4,"\n[SOLICITUD] Ingrese nuevamente el PIN deseado: ")
 	usuarios[dni][0] = pinNuevo
-	print("[MENSAJE] El PIN fue cambiado con éxito. Volviendo al menú del usuario...")
+	print("[MENSAJE] El PIN fue cambiado con éxito.")
 
 
 main()
