@@ -28,7 +28,7 @@ def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
 def distribuirBicicletas(bicicletas, tipoDeCarga):
 	if tipoDeCarga == "predefinida":
 		print("CARGA PREDEFINIDA")
-		distribucionBicicletas = [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]]
+		distribucionBicicletas = [list(range(1000, 1030)), list(range(1030,1055)), list(range(1055,1075)), list(range(1075,1105)), list(range(1105,1135)), list(range(1135,1160)), list(range(1160,1190)), list(range(1190,1205)), list(range(1205,1230)), list(range(1230,1251))]
 		return distribucionBicicletas
 	else:
 		print("CARGA ALEATORIA")
