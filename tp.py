@@ -52,7 +52,7 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 2 and opcionSubmenu == 2:
 		alta(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 3:
-		modificacion()
+		modificacion(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 4:
 		desbloquear()
 	elif opcionElegida == 3 and opcionSubmenu == 1:
