@@ -90,8 +90,8 @@ def alta(usuarios):
 def modificacion (usuarios):
 	opcionElegida = 0 
 	while opcionElegida != 5:
-		print ("\n\n**** MODIFICACION DE DATOS ****\n1. Modificacion de PIN\n2. Modifiacion de Nombre y apellido\n3. Modificacion de celular\n4. Eliminar usuario\n5. Volver al menu anterior\n")
-		opcionElegida = ingresarEntreRangos(1, 5, "Ingrese el número de opción (1 a 5): ")
+		imprimirMenuModificacion()
+		opcionElegida = ingresarEntreRangos(1, 5, "[SOLICITUD] Ingrese el número de opción (1 a 5): ")
 		if opcionElegida != 5:
 			dni = input("[SOLICITUD] Ingrese el DNI: ")
 			if dni.isdigit() and int(dni) in usuarios:
@@ -103,20 +103,20 @@ def modificacion (usuarios):
 					nombre = solicitarValidarDatos("[SOLICITUD] Ingrese su nombre: ")
 					apellido = solicitarValidarDatos("[SOLICITUD] Ingrese su apellido: ")
 					usuarios[dni][1] = nombre + "_" + apellido
-					print ("[INFO] Nombre y apellido del usuario {} fue cambiado con exito.".format(dni))
+					print ("[INFO] Nombre y apellido del usuario {} fue cambiado con éxito.".format(dni))
 				elif opcionElegida == 3:
 					celular = solicitarValidarCelular()
 					usuarios [dni][2] = celular
 					print ("[INFO] Celular del usuario {} cambiado con exito.".format(dni))
 				elif opcionElegida == 4:
-					confirmacion = input("El usuario de DNI {} sera eliminado. Desea confirmar? s/n: ".format(dni))
+					confirmacion = input("El usuario de DNI {} será eliminado. ¿Desea confirmar? s/n: ".format(dni))
 					if confirmacion == "s":
 						del usuarios[dni]
-						print("[INFO] El usuario {} fue eliminado con exito.".format(dni))
+						print("[INFO] El usuario {} fue eliminado con éxito.".format(dni))
 					else:
-						print ("[INFO] Operacion cancelada. Volviendo al menu de modificacion...\n")
+						print ("[INFO] Operacion cancelada. Volviendo al menu de modificación...\n")
 			else:
-				print ("El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificacion... \n")
+				print ("[ERROR] El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificación... \n")
 
 def menuUsuario(usuarios):
 	dni, pin = iniciarSesion(usuarios) 
@@ -136,7 +136,7 @@ def iniciarSesion(usuarios):
 			pin = input("[ERROR] PIN incorrecto, pruebe de nuevo.\nIngrese su PIN asociado: ")
 		return int(dni), pin
 	else:
-		print("No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
+		print("[ERROR] No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
 		return 0, 0
 
 def submenuUsuario(usuarios, opcionElegida, dni, pin):
@@ -158,7 +158,7 @@ def cambiarPin(usuarios, dni, pinViejo):
 		print("\n[ERROR] Los pines no coinciden, intente de nuevo...")
 		pinNuevoRepetido = solicitarValidarDigitos(4, 4,"\n[SOLICITUD] Ingrese nuevamente el PIN deseado: ")
 	usuarios[dni][0] = pinNuevo
-	print("[MENSAJE] El PIN fue cambiado con éxito.")
+	print("[INFO] El PIN fue cambiado con éxito.")
 
 
 main()
