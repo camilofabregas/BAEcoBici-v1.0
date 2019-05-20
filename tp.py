@@ -54,7 +54,7 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 2 and opcionSubmenu == 3:
 		modificacion(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 4:
-		desbloquear()
+		desbloquear(usuarios)
 	elif opcionElegida == 3 and opcionSubmenu == 1:
 		viajeAleatorio()
 	elif opcionElegida == 3 and opcionSubmenu == 2:
