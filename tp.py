@@ -131,7 +131,7 @@ def modificacion (usuarios):
 						print ("[INFO] Operacion cancelada. Volviendo al menu de modificacion...\n")
 			else:
 				print ("El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificacion... \n")
-		print(usuarios)		
+		#print(usuarios)	
 		
 def menuUsuario(usuarios):
 	dni, pin = iniciarSesion(usuarios) 
