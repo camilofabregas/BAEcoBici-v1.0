@@ -1,9 +1,9 @@
 def generarUsuarios(usuarios):
 	if usuarios:
 		usuarios.clear()
-	dni = [41587459, 17199330, 17331253, 24748234, 31933841]
-	pin = ["1010", "8491", "1010", "7423", "1238"]
-	nomApe = ["camilo_fabregas", "ignacio_sanchez", "carla_martinez", "damian_gomez", "marta_diaz"]
+	dni = [41587459, 40902958, 17331253, 24748234, 31933841]
+	pin = ["1010", "1515", "1010", "7423", "1238"]
+	nomApe = ["camilo_fabregas", "agustina_manduca", "carla_martinez", "damian_gomez", "marta_diaz"]
 	celular = ["1122503503", "1184623564", "1573861543", "1162846123", "1186847247"]
 	for dato1, dato2, dato3, dato4 in zip(dni, pin, nomApe, celular):
 		usuarios[dato1] = [dato2, dato3, dato4]
