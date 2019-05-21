@@ -2,12 +2,18 @@ from imprimirMenus import *
 from generarEstructuras import *
 from validaciones import *
 import random
+import os
 
 def main():
 	usuarios, bicicletas, estaciones = dict(), dict(), dict() # Defino los diccionarios vacíos.
 	imprimirLogo() # En el módulo menuYSubmenus
 	menuPrincipal(usuarios, bicicletas, estaciones)
 
+def limpiarPantalla():
+	if os.name == "nt":
+		return os.system("cls")
+	else:
+		return os.system("clear")
 
 def menuPrincipal(usuarios, bicicletas, estaciones):
 	opcionElegida = 0
@@ -15,6 +21,7 @@ def menuPrincipal(usuarios, bicicletas, estaciones):
 		imprimirMenuPrincipal() # En el módulo menuYSubmenus
 		opcionElegida = ingresarEntreRangos(1,6,"[SOLICITUD] Ingrese el número de opción (1 a 6): ")
 		submenuElegido(opcionElegida, usuarios, bicicletas, estaciones)
+		limpiarPantalla()
 
 def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una opción dentro de un rango especifico.
 	opcion = input(mensaje)
@@ -29,7 +36,7 @@ def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones): # Genera el
 		opcionSubmenu = 0
 		while opcionSubmenu != rangoSubmenuElegido:
 			imprimirSubmenuElegido(opcionElegida) # En el módulo menuYSubmenus
-			opcionSubmenu = ingresarEntreRangos(1,rangoSubmenuElegido,"Ingrese el número de opción (1 a {}): ".format(rangoSubmenuElegido))
+			opcionSubmenu = ingresarEntreRangos(1,rangoSubmenuElegido,"[SOLICITUD] Ingrese el número de opción (1 a {}): ".format(rangoSubmenuElegido))
 			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones)
 	elif opcionElegida == 5:
 		menuUsuario(usuarios)
@@ -48,13 +55,13 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 1 and opcionSubmenu == 2:
 		cargarDatos(usuarios, bicicletas, estaciones, "aleatoria") # Idem pero cambia la distribución de bicicletas.
 	elif opcionElegida == 2 and opcionSubmenu == 1:
-		listado(usuarios)
+		listado()
 	elif opcionElegida == 2 and opcionSubmenu == 2:
 		alta(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 3:
 		modificacion(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 4:
-		desbloquear(usuarios)
+		desbloquear()
 	elif opcionElegida == 3 and opcionSubmenu == 1:
 		viajeAleatorio()
 	elif opcionElegida == 3 and opcionSubmenu == 2:
@@ -160,48 +167,5 @@ def cambiarPin(usuarios, dni, pinViejo):
 	usuarios[dni][0] = pinNuevo
 	print("[INFO] El PIN fue cambiado con éxito.")
 
-def imprimirUsuariosBloqueados (usuarios):
-    cantidadUsuariosBloqueados = 0 #Indice para imprimir ordenado
-    print("**** Usuarios Bloqueados ****")
-    for usuario in usuarios:
-        if usuarios[usuario][0] == "": #Filtro del diccionario los usarios bloqueados
-            cantidadUsuariosBloqueados += 1
-            print("{}. {} con dni {}".format(cantidadUsuariosBloqueados, usuarios[usuario][1], usuario)) #imprimo indice, nombre de usuario y dni
-    return cantidadUsuariosBloqueados
-
-def generarPin():
-    num = random.choice('0123456789')
-    num2 = random.choice('0123456789')
-    num3 = random.choice('0123456789')
-    num4 = random.choice('0123456789')
-    nuevoPin = num + num2 + num3 + num4 
-    return nuevoPin
-
-def desbloquear (usuarios):
-    cantidadUsuariosBloqueados = imprimirUsuariosBloqueados(usuarios)
-    if cantidadUsuariosBloqueados > 0:
-        clave = input("Ingrese palabra secreta de desbloqueo: ")
-        if clave == "shimano":
-            usuarioElegido = int(solicitarValidarDigitos(7, 8, "Ingrese el DNI del usuario a desbloquear: "))
-            while usuarioElegido not in usuarios or usuarios[usuarioElegido][0] != "":
-                usuarioElegido = int(solicitarValidarDigitos(7, 8, "[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
-            usuarios[usuarioElegido][0] = generarPin()
-            print("[INFO] Usuario desbloqueado exitosamente. Se le generó el pin {}, a {}.".format(usuarios[usuarioElegido][0], usuarios[usuarioElegido][1]))
-        else:
-            print("[ERROR] Palabra incorrecta")
-    else:
-        print("No hay usuarios bloqueados")
-    print("[INFO] Volviendo al submenu...")
-
-def listado(usuarios):
-    lista = []
-    cont = 0
-    for dni, datos in zip(list(usuarios.keys()), list(usuarios.values())):
-        lista.append((dni, datos))
-    lista.sort(key=lambda x:x[1][1])
-    print("\n\n**** Listado de Usuarios ****")
-    for usuario in lista:
-        cont +=1
-        print("{}. {}, DNI {}, PIN {}, Celular {}".format(cont, usuario[1][1], usuario[0], usuario[1][0], usuario[1][2]))
 
 main()
