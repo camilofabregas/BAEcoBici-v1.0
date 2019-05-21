@@ -48,7 +48,7 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 1 and opcionSubmenu == 2:
 		cargarDatos(usuarios, bicicletas, estaciones, "aleatoria") # Idem pero cambia la distribución de bicicletas.
 	elif opcionElegida == 2 and opcionSubmenu == 1:
-		listado()
+		listado(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 2:
 		alta(usuarios)
 	elif opcionElegida == 2 and opcionSubmenu == 3:
@@ -192,5 +192,16 @@ def desbloquear (usuarios):
     else:
         print("No hay usuarios bloqueados")
     print("[INFO] Volviendo al submenu...")
+
+def listado(usuarios):
+    lista = []
+    cont = 0
+    for dni, datos in zip(list(usuarios.keys()), list(usuarios.values())):
+        lista.append((dni, datos))
+    lista.sort(key=lambda x:x[1][1])
+    print("\n\n**** Listado de Usuarios ****")
+    for usuario in lista:
+        cont +=1
+        print("{}. {}, DNI {}, PIN {}, Celular {}".format(cont, usuario[1][1], usuario[0], usuario[1][0], usuario[1][2]))
 
 main()
