@@ -8,7 +8,7 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni):
 		if listadoEstaciones == "s":
 			print ("\n")
 			for identificador in estaciones:
-				print(estaciones[identificador]["Dirección"],": N°", identificador, ".Tiene {} bicicletas ancladas.".format(len(estaciones[identificador]["Bicicletas"])))
+				print(estaciones[identificador]["Dirección"],": N°", identificador, ". Tiene {} bicicletas ancladas.".format(len(estaciones[identificador]["Bicicletas"])))
 			print ("\n")
 		idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "[SOLICITUD] Por favor, ingrese un numero entre 1 y {}: ".format(len(estaciones))))
 	if len(estaciones[idEstacion]["Bicicletas"]) == 0:
