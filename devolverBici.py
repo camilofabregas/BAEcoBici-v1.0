@@ -15,7 +15,7 @@ def generarDuracionDeViaje(usuarios):
     num2 = random.choice('0123456789')
     duracionViaje = num + num2
     if int(duracionViaje)<5:
-        generarDuracionDeviaje()
+        generarDuracionDeviaje(usuarios)
     elif int(duracionViaje)>60:
         print("[INFO] Su viaje exedió el límite de una hora. Su usuario ha sido bloqueado.")
     else:
