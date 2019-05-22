@@ -21,15 +21,23 @@ def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
 	direcciones = ["Parque Lezama", "Plaza de Mayo", "Retiro", "Facultad de Derecho", "Obelisco", "Congreso", "Constitución", "Planetario", "Parque Centenario", "Alto Palermo"]
 	latitudLongitud = [(-34.6261, -58.3684), (-34.6082, -58.3709), (-34.5916, -58.3743), (-34.5828, -58.3920), (-34.6037, -58.3814), (-34.6095, -58.3889), (-34.6266, -58.3811), (-34.5696, -58.4117), (-34.6073, -58.4335), (-34.5890, -58.4100)]
 	anclajesTotales = [30, 25, 20, 30, 30, 25, 30, 15, 25, 25]
-	anclajesOcupados = distribuirBicicletas(bicicletas, tipoDeCarga)
+	anclajesOcupados = distribuirBicicletas(anclajesTotales, tipoDeCarga)
 	for dato1, dato2, dato3, dato4, dato5 in zip(identificador, direcciones, latitudLongitud, anclajesTotales, anclajesOcupados):
 		estaciones[dato1] = {"Dirección": dato2, "Latitud y longitud": dato3, "Capacidad": dato4, "Bicicletas": dato5}
 
-def distribuirBicicletas(bicicletas, tipoDeCarga):
-	if tipoDeCarga == "predefinida":
-		print("CARGA PREDEFINIDA")
-		distribucionBicicletas = [list(range(1000, 1030)), list(range(1030,1055)), list(range(1055,1075)), list(range(1075,1105)), list(range(1105,1135)), list(range(1135,1160)), list(range(1160,1190)), list(range(1190,1205)), list(range(1205,1230)), list(range(1230,1251))]
-		return distribucionBicicletas
+def distribuirBicicletas(anclajes, tipoDeCarga):
+	if tipoCarga == "predefinida":
+		distribucionAnclajes = [22, 15, 27, 24, 22, 29, 24, 28, 19, 30]
+		idBicis = list(range(1000, 1240))
+		resultadoFinal = []
+		for i in distribucionAnclajes:
+			resultadoParcial = {}
+			bicisPorEstacion = [x for x in idBicis if idBicis.index(x) < i]
+			for bici in bicisPorEstacion:
+				idBicis.remove(bici)
+				resultadoParcial[bicisPorEstacion.index(bici)+1] = bici
+			resultadoFinal.append(resultadoParcial)
+		return resultadoFinal
 	else:
 		print("CARGA ALEATORIA")
 		distribucionBicicletas = ["asdasdasdasd"]
