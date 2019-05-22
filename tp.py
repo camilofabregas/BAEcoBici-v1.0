@@ -82,7 +82,6 @@ def cargarDatos(usuarios, bicicletas, estaciones, tipoDeCarga):
 	print("\n\n[INFO] Se ha realizado una carga automática {} de datos de usuarios, bicicletas y estaciones.\nVolviendo al submenú de carga de datos...".format(tipoDeCarga))
 
 def alta(usuarios):
-	print(usuarios)
 	dni = int(solicitarValidarDigitos(7, 8, "[SOLICITUD] Ingrese su DNI (sin puntos ni espacios): "))
 	if dni not in usuarios:
 		pin = solicitarValidarDigitos(4, 4, "[SOLICITUD] Ingrese un PIN de 4 dígitos: ")
