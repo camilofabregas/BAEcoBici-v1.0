@@ -1,8 +1,7 @@
 from validaciones import*
-from generarEstructuras import*
 import random
 
-def devolverBici(usuarios, estaciones):
+def devolverBicicleta(usuarios, estaciones):
 	print("**** ESTACIONES ****")
 	for estacion in estaciones:
 		print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
@@ -11,16 +10,13 @@ def devolverBici(usuarios, estaciones):
 		idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
 
 
-def generarDuracionDeViaje():
-	num = random.choice('0123456789')
+def generarDuracionDeViaje(usuarios):
+    num = random.choice('0123456789')
     num2 = random.choice('0123456789')
     duracionViaje = num + num2
-    if int(duracionViaje) < 5:
-    	generarEstructuras()
-    return duracionViaje
-
-def validarDuracion(duracionViaje, usuarios):
-	if int(duracionViaje) > 60:
-		print("[INFO] Su viaje exedió el límite de una hora. Su usuario ha sido bloqueado.")
-		usuarios[dniUsuario][0] == ""
-	print("Su viaje duró {} minutos.".format(int(duracionViaje)))
+    if int(duracionViaje)<5:
+        generarDuracionDeviaje()
+    elif int(duracionViaje)>60:
+        print("[INFO] Su viaje exedió el límite de una hora. Su usuario ha sido bloqueado.")
+    else:
+        print("Su viaje duró {} minutos.".format(int(duracionViaje)))
