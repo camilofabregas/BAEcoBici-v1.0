@@ -1,7 +1,7 @@
 from validaciones import*
 import random
 
-def devolverBicicleta(estaciones usuarios):
+def devolverBicicleta(estaciones):
 	print("**** ESTACIONES ****")
 	for estacion in estaciones:
 		print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
