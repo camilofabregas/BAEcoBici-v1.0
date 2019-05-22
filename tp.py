@@ -39,7 +39,7 @@ def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones): # Genera el
 			opcionSubmenu = ingresarEntreRangos(1,rangoSubmenuElegido,"[SOLICITUD] Ingrese el número de opción (1 a {}): ".format(rangoSubmenuElegido))
 			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones)
 	elif opcionElegida == 5:
-		menuUsuario(usuarios)
+		menuUsuario(usuarios, bicicletas, estaciones)
 
 def calcularRangoSubmenuElegido(opcionElegida):
 	if opcionElegida == 1 or opcionElegida == 3:
@@ -160,14 +160,14 @@ def desbloquear (usuarios):
     print("[INFO] Volviendo al submenu...")				
 				
 				
-def menuUsuario(usuarios):
+def menuUsuario(usuarios, bicicletas, estaciones):
 	dni, pin = iniciarSesion(usuarios) 
 	if dni != 0:
 		opcionElegida = 0
 		while opcionElegida != 4:
 			imprimirMenuUsuario()
 			opcionElegida = ingresarEntreRangos(1,4,"[SOLICITUD] Ingrese el número de opción (1 a 4): ")
-			submenuUsuario(usuarios, opcionElegida, dni, pin)
+			submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin)
 
 def iniciarSesion(usuarios):
 	print("\n\n**** INICIAR SESIÓN *****")
@@ -181,7 +181,7 @@ def iniciarSesion(usuarios):
 		print("[ERROR] No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
 		return 0, 0
 
-def submenuUsuario(usuarios, opcionElegida, dni, pin):
+def submenuUsuario(usuarios,bicicletas, estaciones, opcionElegida, dni, pin):
 	if opcionElegida == 1:
 		cambiarPin(usuarios, dni, pin)
 	elif opcionElegida == 2:
