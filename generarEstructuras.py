@@ -9,9 +9,9 @@ def generarUsuarios(usuarios):
 		usuarios[dato1] = [dato2, dato3, dato4]
 
 def generarBicicletas(bicicletas):
-	for num in range(1000,1241):
+	for num in range(1000,1240):
 		bicicletas[num] = ["En condiciones", "Anclada en estación"]
-	for num in range(1241,1251):
+	for num in range(1240,1250):
 		bicicletas[num] = ["Necesita reparación", "En reparación"]
 
 def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
