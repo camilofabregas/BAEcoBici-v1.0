@@ -26,7 +26,7 @@ def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
 		estaciones[dato1] = {"Dirección": dato2, "Latitud y longitud": dato3, "Capacidad": dato4, "Bicicletas": dato5}
 
 def distribuirBicicletas(anclajes, tipoDeCarga):
-	if tipoCarga == "predefinida":
+	if tipoDeCarga == "predefinida":
 		distribucionAnclajes = [22, 15, 27, 24, 22, 29, 24, 28, 19, 30]
 		idBicis = list(range(1000, 1240))
 		resultadoFinal = []
