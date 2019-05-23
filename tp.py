@@ -260,7 +260,6 @@ def devolverBicicleta(estaciones, usuarios, dni, bicicletas):
             bicicletas[idBicicleta][0] = "Necesita reparación"
             bicicletas[idBicicleta][1] = "En reparación"
             print("[INFO] La bicicleta se enviará a reparación.")
-        print (bicicletas)
         generarDuracionDeViaje(usuarios, dni)
 
 
