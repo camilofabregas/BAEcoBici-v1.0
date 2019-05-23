@@ -242,25 +242,27 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
 		
 def devolverBicicleta(estaciones, usuarios, dni, bicicletas, usuariosEnViaje):
-    print("**** ESTACIONES ****")
-    for estacion in estaciones:
-        print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
-    idEstacion = int(solicitarValidarDigitos(1, 10, "[SOLICITUD] Ingrese el número de la estación donde devolverá la bicicleta: "))
-    while idEstacion not in estaciones:
-        idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
-    if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
-        print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
+    if dni not in usuariosEnViaje:
+        print("[INFO] Usted no ha retirado una bicicleta. Volviendo al submenu...")
     else:
-        idBicicleta = usuariosEnViaje[dni][1]
-	bicicletas[idBicicleta][1] = "Anclada en estación"
-        estadoBici = input("[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
-        if estadoBici == "s":
-            bicicletas[idBicicleta][0] = "Necesita reparación"
-            bicicletas[idBicicleta][1] = "En reparación"
-            print("[INFO] La bicicleta se enviará a reparación.")
-        print (bicicletas)
-        generarDuracionDeViaje(usuarios, dni)
-        del(usuariosEnViaje[dni])
+        print("**** ESTACIONES ****")
+        for estacion in estaciones:
+            print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
+        idEstacion = int(solicitarValidarDigitos(1, 10, "[SOLICITUD] Ingrese el número de la estación donde devolverá la bicicleta: "))
+        while idEstacion not in estaciones:
+            idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
+        if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
+            print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
+        else:
+            idBicicleta = usuariosEnViaje[dni][1]
+            bicicletas[idBicicleta][1] = "Anclada en estación"
+            estadoBici = input("[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
+            if estadoBici == "s":
+                bicicletas[idBicicleta][0] = "Necesita reparación"
+                bicicletas[idBicicleta][1] = "En reparación"
+                print("[INFO] La bicicleta se enviará a reparación.")
+            generarDuracionDeViaje(usuarios, dni)
+            del(usuariosEnViaje[dni])
 
 
 def generarDuracionDeViaje(usuarios, dni):
