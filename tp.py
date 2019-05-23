@@ -205,7 +205,18 @@ def cambiarPin(usuarios, dni, pinViejo):
 def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 	if dni in usuariosEnViaje:
 		print("El usuario {} actualmente se encuentra en viaje, no puede retirar otra bicicleta.".format(dni))
+	elif usuarios[dni][0] == "":
+		print("[INFO] El usuario se encuentra actualmente bloqueado. Invalidando acción")
 	else:
+		contador = 3
+		pin = input("[SOLICITUD] Ingrese su numero de PIN: ")
+		while contador != 0 and pin != usuarios[dni][0]:
+			contador -= 1
+			pin = input("[ERROR] Por favor, ingrese su numero de pin correctamente. Tiene {} intentos restantes: ".format(contador))
+			if contador == 0:
+				usuarios[dni][0] = ""
+				print ("[INFO] El usuario {} fue bloqueado porque excedio la cantidad de intentos permitida".format(dni))
+				return None
 		listadoEstaciones = input("[INFO] Desea ver las estaciones disponibles? s/n: ")
 		if listadoEstaciones == "s":
 			print ("\n")
@@ -218,7 +229,7 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 		if len(estaciones[idEstacion]["Bicicletas"]) == 0:
 			print("[INFO] La estacion {} no dispone de ninguna bicicleta libre en ella. Intente con otra estacion.".format(estaciones[idEstacion]["Dirección"]))
 		elif len(estaciones[idEstacion]["Bicicletas"]) > 0:
-			anclajeParaRetirar = random.randrange(len(estaciones[idEstacion]["Bicicletas"]))
+			anclajeParaRetirar = random.randrange(1,len(estaciones[idEstacion]["Bicicletas"]))
 			bicicletaRetirada = estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar]
 			print("[SOLICITUD] Acerquese al anclaje {} y retire la bicicleta {}.\n".format(anclajeParaRetirar,bicicletaRetirada))
 			estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar] = ""
@@ -228,8 +239,9 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 			horarioSalida = time(horas, minutos, segundos)
 			bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
 			print("[INFO] El usuario {} retiro la bicicleta N° {} en la estacion {} del anclaje {} a las {} con exito. \n\n".format(dni,bicicletaRetirada, estaciones[idEstacion]["Dirección"], anclajeParaRetirar, horarioSalida))
-		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]	
-
+		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
+		
+	
 def horarios (horaMinimo, minutosMinimo, segundosMinimo, horaMaximo, minutosMaximo, segundosMaximo):
 		horas = random.randrange(horaMinimo, horaMaximo)
 		minutos = random.randrange(minutosMinimo, minutosMaximo)
