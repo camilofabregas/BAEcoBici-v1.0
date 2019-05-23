@@ -26,19 +26,16 @@ def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
 		estaciones[dato1] = {"Dirección": dato2, "Latitud y longitud": dato3, "Capacidad": dato4, "Bicicletas": dato5}
 
 def distribuirBicicletas(anclajes, tipoDeCarga):
-	if tipoDeCarga == "predefinida":
-		distribucionAnclajes = [22, 15, 27, 24, 22, 29, 24, 28, 19, 30]
-		idBicis = list(range(1000, 1240))
-		resultadoFinal = []
-		for i in distribucionAnclajes:
-			resultadoParcial = {}
-			bicisPorEstacion = [x for x in idBicis if idBicis.index(x) < i]
-			for bici in bicisPorEstacion:
-				idBicis.remove(bici)
-				resultadoParcial[bicisPorEstacion.index(bici)+1] = bici
-			resultadoFinal.append(resultadoParcial)
-		return resultadoFinal
-	else:
-		print("CARGA ALEATORIA")
-		distribucionBicicletas = ["asdasdasdasd"]
-		return distribucionBicicletas
+	distribucionAnclajes = [22, 15, 27, 24, 22, 29, 24, 28, 19, 30] # Cuantas bicis habrá por estación
+	idBicis = list(range(1000, 1240))
+	if tipoDeCarga == "aleatoria":
+		random.shuffle(idBicis)
+	distribuciones = [] # Lista de diccionarios de las bicis distribuidas por estación
+	for i in distribucionAnclajes:
+		distribucionPorEstacion = {}
+		bicisPorEstacion = [x for x in idBicis if idBicis.index(x) < i]
+		for bici in bicisPorEstacion:
+			idBicis.remove(bici)
+			distribucionPorEstacion[bicisPorEstacion.index(bici)+1] = bici
+		distribuciones.append(distribucionPorEstacion)
+	return distribuciones
