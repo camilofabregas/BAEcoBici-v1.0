@@ -187,7 +187,7 @@ def submenuUsuario(usuarios,bicicletas, estaciones, opcionElegida, dni, pin, usu
 	elif opcionElegida == 2:
 		retirarBicicleta(usuarios, bicicletas, estaciones, dni, usuariosEnViaje)
 	elif opcionElegida == 3:
-		devolverBicicleta()
+		devolverBicicleta(estaciones, usuarios, dni)
 
 def cambiarPin(usuarios, dni, pinViejo):
 	print("\n")
@@ -240,6 +240,33 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 			bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
 			print("[INFO] El usuario {} retiro la bicicleta N° {} en la estacion {} del anclaje {} a las {} hs. con exito. \n\n".format(dni,bicicletaRetirada, estaciones[idEstacion]["Dirección"], anclajeParaRetirar, horarioSalida))
 		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
+		
+def devolverBicicleta(estaciones, usuarios, dni):
+    print("**** ESTACIONES ****")
+    for estacion in estaciones:
+        print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
+    idEstacion = int(solicitarValidarDigitos(1, 10, "[SOLICITUD] Ingrese el número de la estación donde devolverá la bicicleta: "))
+    while idEstacion not in estaciones:
+        idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
+    if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
+        print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
+    else:
+        generarDuracionDeViaje(usuarios, dni)
+
+
+def generarDuracionDeViaje(usuarios, dni):
+    num = random.choice('0123456789')
+    num2 = random.choice('0123456789')
+    duracionViaje = num + num2
+    while int(duracionViaje) < 5 or int(duracionViaje) > 75:
+    	num = random.choice('0123456789')
+    	num2 = random.choice('0123456789')
+    	duracionViaje = num + num2
+    if int(duracionViaje) > 60:
+    	print("[INFO] Su viaje exedió el límite de una hora. Su usuario ha sido bloqueado.")
+    	usuarios[dni][0] = ""
+    else:
+    	print("Su viaje duró {} minutos.".format(int(duracionViaje)))
 		
 	
 def horarios (horaMinimo, minutosMinimo, segundosMinimo, horaMaximo, minutosMaximo, segundosMaximo):
