@@ -252,6 +252,7 @@ def devolverBicicleta(estaciones, usuarios, dni, bicicletas, usuariosEnViaje):
         print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
     else:
         idBicicleta = usuariosEnViaje[dni][1]
+	bicicletas[idBicicleta][1] = "Anclada en estación"
         estadoBici = input("[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
         if estadoBici == "s":
             bicicletas[idBicicleta][0] = "Necesita reparación"
