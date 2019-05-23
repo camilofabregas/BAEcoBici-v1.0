@@ -2,12 +2,13 @@ from imprimirMenus import *
 from generarEstructuras import *
 from validaciones import *
 import random
+import datetime
 import os
 
 def main():
-	usuarios, bicicletas, estaciones = dict(), dict(), dict() # Defino los diccionarios vacíos.
+	usuarios, bicicletas, estaciones, usuariosEnViaje = dict(), dict(), dict(), dict() # Defino los diccionarios vacíos.
 	imprimirLogo() # En el módulo menuYSubmenus
-	menuPrincipal(usuarios, bicicletas, estaciones)
+	menuPrincipal(usuarios, bicicletas, estaciones, usuariosEnViaje)
 
 def limpiarPantalla():
 	if os.name == "nt":
@@ -15,12 +16,12 @@ def limpiarPantalla():
 	else:
 		return os.system("clear")
 
-def menuPrincipal(usuarios, bicicletas, estaciones):
+def menuPrincipal(usuarios, bicicletas, estaciones, usuariosEnViaje):
 	opcionElegida = 0
 	while opcionElegida != 6:
 		imprimirMenuPrincipal() # En el módulo menuYSubmenus
 		opcionElegida = ingresarEntreRangos(1,6,"[SOLICITUD] Ingrese el número de opción (1 a 6): ")
-		submenuElegido(opcionElegida, usuarios, bicicletas, estaciones)
+		submenuElegido(opcionElegida, usuarios, bicicletas, estaciones, usuariosEnViaje)
 		limpiarPantalla()
 
 def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una opción dentro de un rango especifico.
@@ -30,7 +31,7 @@ def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una op
 		opcion = input(mensaje)
 	return int(opcion)
 
-def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones): # Genera el submenu de la opción que elegí en el menu principal
+def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones, usuariosEnViaje): # Genera el submenu de la opción que elegí en el menu principal
 	if opcionElegida != 5 and opcionElegida != 6: # Si no es "Salir del programa" o "Ingresar al sistema"
 		rangoSubmenuElegido = calcularRangoSubmenuElegido(opcionElegida)
 		opcionSubmenu = 0
@@ -39,7 +40,7 @@ def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones): # Genera el
 			opcionSubmenu = ingresarEntreRangos(1,rangoSubmenuElegido,"[SOLICITUD] Ingrese el número de opción (1 a {}): ".format(rangoSubmenuElegido))
 			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones)
 	elif opcionElegida == 5:
-		menuUsuario(usuarios, bicicletas, estaciones)
+		menuUsuario(usuarios, bicicletas, estaciones, usuariosEnViaje)
 
 def calcularRangoSubmenuElegido(opcionElegida):
 	if opcionElegida == 1 or opcionElegida == 3:
@@ -159,14 +160,14 @@ def desbloquear (usuarios):
     print("[INFO] Volviendo al submenu...")				
 				
 				
-def menuUsuario(usuarios, bicicletas, estaciones):
+def menuUsuario(usuarios, bicicletas, estaciones, usuariosEnViaje):
 	dni, pin = iniciarSesion(usuarios) 
 	if dni != 0:
 		opcionElegida = 0
 		while opcionElegida != 4:
 			imprimirMenuUsuario()
 			opcionElegida = ingresarEntreRangos(1,4,"[SOLICITUD] Ingrese el número de opción (1 a 4): ")
-			submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin)
+			submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin, usuariosEnViaje)
 
 def iniciarSesion(usuarios):
 	print("\n\n**** INICIAR SESIÓN *****")
@@ -180,11 +181,11 @@ def iniciarSesion(usuarios):
 		print("[ERROR] No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
 		return 0, 0
 
-def submenuUsuario(usuarios,bicicletas, estaciones, opcionElegida, dni, pin):
+def submenuUsuario(usuarios,bicicletas, estaciones, opcionElegida, dni, pin, usuariosEnViaje):
 	if opcionElegida == 1:
 		cambiarPin(usuarios, dni, pin)
 	elif opcionElegida == 2:
-		retirarBicicleta()
+		retirarBicicleta(usuarios, bicicletas, estaciones, dni, usuariosEnViaje)
 	elif opcionElegida == 3:
 		devolverBicicleta()
 
@@ -200,6 +201,40 @@ def cambiarPin(usuarios, dni, pinViejo):
 		pinNuevoRepetido = solicitarValidarDigitos(4, 4,"\n[SOLICITUD] Ingrese nuevamente el PIN deseado: ")
 	usuarios[dni][0] = pinNuevo
 	print("[INFO] El PIN fue cambiado con éxito.")
+
+def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
+	if dni in usuariosEnViaje:
+		print("El usuario {} actualmente se encuentra en viaje, no puede retirar otra bicicleta.".format(dni))
+	else:
+		listadoEstaciones = input("[INFO] Desea ver las estaciones disponibles? s/n: ")
+		if listadoEstaciones == "s":
+			print ("\n")
+			for identificador in estaciones:
+				print(estaciones[identificador]["Dirección"],": N°", identificador, ". Tiene {} bicicletas ancladas.".format(len(estaciones[identificador]["Bicicletas"])))
+			print ("\n")
+		idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
+		while idEstacion not in estaciones:
+			idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "[SOLICITUD] Por favor, ingrese un numero entre 1 y {}: ".format(len(estaciones))))
+		if len(estaciones[idEstacion]["Bicicletas"]) == 0:
+			print("[INFO] La estacion {} no dispone de ninguna bicicleta libre en ella. Intente con otra estacion.".format(estaciones[idEstacion]["Dirección"]))
+		elif len(estaciones[idEstacion]["Bicicletas"]) > 0:
+			anclajeParaRetirar = random.randrange(len(estaciones[idEstacion]["Bicicletas"]))
+			bicicletaRetirada = estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar]
+			print("[SOLICITUD] Acerquese al anclaje {} y retire la bicicleta {}.\n".format(anclajeParaRetirar,bicicletaRetirada))
+			estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar] = ""
+			horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
+			while (horas == 22) and (minutos > 44):
+				horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
+			horarioSalida = time(horas, minutos, segundos)
+			bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
+			print("[INFO] El usuario {} retiro la bicicleta N° {} en la estacion {} del anclaje {} a las {} con exito. \n\n".format(dni,bicicletaRetirada, estaciones[idEstacion]["Dirección"], anclajeParaRetirar, horarioSalida))
+		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]	
+
+def horarios (horaMinimo, minutosMinimo, segundosMinimo, horaMaximo, minutosMaximo, segundosMaximo):
+		horas = random.randrange(horaMinimo, horaMaximo)
+		minutos = random.randrange(minutosMinimo, minutosMaximo)
+		segundos = random.randrange(segundosMinimo, segundosMaximo)
+		return (horas, minutos, segundos)
 
 
 main()
