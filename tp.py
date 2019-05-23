@@ -238,7 +238,7 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, usuariosEnViaje):
 				horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
 			horarioSalida = time(horas, minutos, segundos)
 			bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
-			print("[INFO] El usuario {} retiro la bicicleta N° {} en la estacion {} del anclaje {} a las {} con exito. \n\n".format(dni,bicicletaRetirada, estaciones[idEstacion]["Dirección"], anclajeParaRetirar, horarioSalida))
+			print("[INFO] El usuario {} retiro la bicicleta N° {} en la estacion {} del anclaje {} a las {} hs. con exito. \n\n".format(dni,bicicletaRetirada, estaciones[idEstacion]["Dirección"], anclajeParaRetirar, horarioSalida))
 		usuariosEnViaje[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
 		
 	
