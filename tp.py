@@ -148,9 +148,9 @@ def desbloquear (usuarios):
     if cantidadUsuariosBloqueados > 0:
         clave = input("Ingrese palabra secreta de desbloqueo: ")
         if clave == "shimano":
-            usuarioElegido = input("Ingrese el DNI del usuario a desbloquear: ")
+            usuarioElegido = int(input("Ingrese el DNI del usuario a desbloquear: "))
             while usuarioElegido not in usuarios or usuarios[usuarioElegido][0] != "":
-                usuarioElegido = input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: ")
+                usuarioElegido = int(input("[ERROR] Debe ingresar el DNI de un usuario bloqueado: "))
             usuarios[usuarioElegido][0] = generarPin()
             print("[INFO] Usuario desbloqueado exitosamente. Se le generó el pin {}, a {}.".format(usuarios[usuarioElegido][0], usuarios[usuarioElegido][1]))
         else:
