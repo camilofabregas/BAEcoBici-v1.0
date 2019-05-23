@@ -73,7 +73,7 @@ def invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicle
 	elif opcionElegida == 4 and opcionSubmenu == 2:
 		topUsuariosDuracionViajes()
 	elif opcionElegida == 4 and opcionSubmenu == 3:
-		bicicletasEnReparacion()
+		bicicletasEnReparacion(bicicletas)
 	elif opcionElegida == 4 and opcionSubmenu == 4:
 		estacionesMasActivas()
 
