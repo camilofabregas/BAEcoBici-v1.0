@@ -163,7 +163,14 @@ def desbloquear (usuarios):
     else:
         print("No hay usuarios bloqueados")
     print("[INFO] Volviendo al submenu...")				
-				
+
+def bicicletasEnReparacion (bicicletas):
+	bicisEnReparacion = []
+	for bicicleta in bicicletas:
+		if bicicletas[bicicleta][0] == "Necesita reparación":
+			bicisEnReparacion.append(bicicleta)
+	for bicicleta in bicisEnReparacion:
+		print("[INFO] La bicicleta {} necesita reparacion.".format(bicicleta))	
 				
 def menuUsuario(usuarios, bicicletas, estaciones, usuariosEnViaje):
 	dni, pin = iniciarSesion(usuarios)
