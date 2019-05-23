@@ -254,12 +254,13 @@ def devolverBicicleta(estaciones, usuarios, dni, bicicletas, usuariosEnViaje):
         if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
             print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
         else:
-            idBicicleta = usuariosEnViaje[dni][1]
-            bicicletas[idBicicleta][1] = "Anclada en estación"
+            usuariosEnViaje[dni][1] = estaciones[idEstacion]["Dirección"]
+            print(usuariosEnViaje[dni][1])
+            bicicletas[usuariosEnViaje[dni][0]][1] = "Anclada en estación"
             estadoBici = input("[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
             if estadoBici == "s":
-                bicicletas[idBicicleta][0] = "Necesita reparación"
-                bicicletas[idBicicleta][1] = "En reparación"
+                bicicletas[usuariosEnViaje[dni][0]][0] = "Necesita reparación"
+                bicicletas[usuariosEnViaje[dni][0]][1] = "En reparación"
                 print("[INFO] La bicicleta se enviará a reparación.")
             generarDuracionDeViaje(usuarios, dni)
             del(usuariosEnViaje[dni])
