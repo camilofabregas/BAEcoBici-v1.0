@@ -8,7 +8,8 @@ def viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFina
     estacionRetirar = random.randrange(1, 11)
     while len(estaciones[estacionRetirar]["Bicicletas"]) == 0:
         estacionRetirar = random.randrange(1, 11)
-    anclajeAsignado = random.randrange(1, len(estaciones[estacionRetirar]["Bicicletas"])+1)
+    anclajesDisponibles = list(estaciones[estacionRetirar]["Bicicletas"].keys())
+    anclajeAsignado = random.choice(anclajesDisponibles)
     bicicletaAsignada = estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado]
     while bicicletas[bicicletaAsignada] == ["Necesita reparación", "En reparación"]:
         anclajeAsignado = random.randrange(1, len(estaciones[estacionRetirar]["Bicicletas"])+1)
@@ -17,13 +18,13 @@ def viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFina
     horaSalida, minSalida, segSalida = horarios(0, 0, 0, 23, 60, 60)
     while horaSalida == 22 and minSalida > 29:
         horaSalida, minSalida, segSalida = horarios(0, 0, 0, 23, 60, 60)
-    print("{} retiró la bicicleta {} de la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado], estacionRetirar, estaciones[estacionRetirar]["Dirección"], time(horaSalida, minSalida, segSalida)))
+    print("\n{} retiró la bicicleta {} de la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionRetirar, estaciones[estacionRetirar]["Dirección"], time(horaSalida, minSalida, segSalida)))
     estacionDevolver = random.randrange(1, 11)
-    while estacionDevolver == estacionRetirar:
+    while estacionDevolver == estacionRetirar or len(estaciones[estacionDevolver]["Bicicletas"]) == estaciones[estacionDevolver]["Capacidad"]:
         estacionDevolver = random.randrange(1, 11)
     horaViaje, minViaje, segViaje = horarios(0, 0, 0, 2, 30, 60)  # maximo 90 minutos que equivale a 1:30:00hs
     horaLlegada, minLlegada, segLlegada = calcularHoraLlegada(horaSalida, minSalida, segSalida, horaViaje, minViaje, segViaje)
-    print("{} devolvió la bicicleta {} en la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado], estacionDevolver, estaciones[estacionDevolver]["Dirección"], time(horaLlegada, minLlegada, segLlegada)))
+    print("{} devolvió la bicicleta {} en la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionDevolver, estaciones[estacionDevolver]["Dirección"], time(horaLlegada, minLlegada, segLlegada)))
     if horaViaje == 1 and segViaje > 0:
         usuarios[usuario][0] = ""
         print("Al exceder los 60 minutos de uso ha sido bloqueado")
@@ -32,6 +33,7 @@ def viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFina
     elif usuario in viajesFinalizados:  # acumula los viajes de un mismo usuario
         viajesFinalizados[usuario].append((bicicletaAsignada, estacionRetirar, time(horaSalida, minSalida, segSalida) , estacionDevolver, time(horaLlegada, minLlegada, segLlegada)))  # no me funciona el time()
     
+    print("\nDICCIONARIOS")
     print(viajesFinalizados)  # para verificar
     print(usuarios)  # para verificar si bloquea el usuario al exceder tiempo
 
@@ -48,10 +50,10 @@ def calcularHoraLlegada(horas, minutos, segundos, horaViaje, minViaje, segViaje)
     return (horaLlegada, minLlegada, segLlegada)
 
 def horarios (horaMinimo, minutosMinimo, segundosMinimo, horaMaximo, minutosMaximo, segundosMaximo):
-		horas = random.randrange(horaMinimo, horaMaximo)
-		minutos = random.randrange(minutosMinimo, minutosMaximo)
-		segundos = random.randrange(segundosMinimo, segundosMaximo)
-		return (horas, minutos, segundos)
+	horas = random.randrange(horaMinimo, horaMaximo)
+	minutos = random.randrange(minutosMinimo, minutosMaximo)
+	segundos = random.randrange(segundosMinimo, segundosMaximo)
+	return (horas, minutos, segundos)
 
 # USO FUNCIONES QUE YA ESTAN EN TP, PERO LAS IMPORTO DESDE ACA PARA NO METERLO DE UNA Y PARA QUE PRUEBEN ANTES
 # DEBERIAN AGREGAR A TP: from viajeAleatorio import *
