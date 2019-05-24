@@ -42,6 +42,8 @@ def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones, viajesEnCurs
 			invocarFuncionSubmenuElegido(opcionElegida, opcionSubmenu, usuarios, bicicletas, estaciones, viajesEnCurso, viajesFinalizados)
 	elif opcionElegida == 5:
 		menuUsuario(usuarios, bicicletas, estaciones, viajesEnCurso)
+	else:
+		exit()
 
 def calcularRangoSubmenuElegido(opcionElegida):
 	if opcionElegida == 1 or opcionElegida == 3:
@@ -88,7 +90,7 @@ def listado(usuarios):
     for dni, datos in zip(list(usuarios.keys()), list(usuarios.values())):
         lista.append((dni, datos))
     lista.sort(key=lambda x:x[1][1])
-    print("\n\n**** Listado de Usuarios ****")
+    print("\n\n**** LISTADO DE USUARIOS ****")
     for usuario in lista:
         cont +=1
         print("{}. {}, DNI {}, PIN {}, Celular {}".format(cont, usuario[1][1], usuario[0], usuario[1][0], usuario[1][2]))
@@ -113,11 +115,15 @@ def modificacion (usuarios):
 		imprimirMenuModificacion()
 		opcionElegida = ingresarEntreRangos(1, 5, "[SOLICITUD] Ingrese el número de opción (1 a 5): ")
 		if opcionElegida != 5:
-			dni = input("[SOLICITUD] Ingrese el DNI: ")
+			dni = input("\n[SOLICITUD] Ingrese el DNI: ")
 			if dni.isdigit() and int(dni) in usuarios:
 				dni = int(dni)
 				if opcionElegida == 1:
 					pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
+					while usuarios[dni][0] != pin:
+						print("\n[ERROR] El PIN ingresado no es correcto")
+						pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
+					limpiarPantalla()
 					cambiarPin(usuarios, dni, pin)
 				elif opcionElegida == 2:
 					nombre = solicitarValidarDatos("[SOLICITUD] Ingrese su nombre: ")
@@ -136,7 +142,8 @@ def modificacion (usuarios):
 					else:
 						print ("[INFO] Operacion cancelada. Volviendo al menu de modificación...\n")
 			else:
-				print ("[ERROR] El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificación... \n")
+				limpiarPantalla()
+				print ("\n[ERROR] El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificación... \n")
 
 def imprimirUsuariosBloqueados (usuarios):
     cantidadUsuariosBloqueados = 0 #Indice para imprimir ordenado
@@ -184,6 +191,10 @@ def iniciarSesion(usuarios):
 	print("\n\n**** INICIAR SESIÓN *****")
 	dni = input("[SOLICITUD] Ingrese su DNI: ")
 	if dni.isdigit() and int(dni) in usuarios:
+		if usuarios[int(dni)][0] == "":
+			limpiarPantalla()
+			print("\n[ERROR] Su cuenta se encuentra bloqueada, volviendo al menu principal...")
+			return 0, 0
 		pin = input("[SOLICITUD] Ingrese su PIN asociado: ")
 		while pin != usuarios[int(dni)][0]:
 			pin = input("\n[ERROR] PIN incorrecto, pruebe de nuevo.\n[SOLICITUD] Ingrese su PIN asociado: ")
@@ -191,7 +202,8 @@ def iniciarSesion(usuarios):
 		print("\n[MENSAJE] Iniciaste sesión con éxito. ¡Bienvenido, {}!".format(usuarios[int(dni)][1]))
 		return int(dni), pin
 	else:
-		print("[ERROR] No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
+		limpiarPantalla()
+		print("\n[ERROR] No hay una cuenta registrada con ese DNI, volviendo al menu principal...")
 		return 0, 0
 
 def submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin, viajesEnCurso):
