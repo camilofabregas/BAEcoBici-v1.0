@@ -33,7 +33,7 @@ def ingresarEntreRangos(inicio, fin, mensaje): #Para ingresar (y validar) una op
 	return int(opcion)
 
 def submenuElegido(opcionElegida, usuarios, bicicletas, estaciones, viajesEnCurso, viajesFinalizados): # Genera el submenu de la opción que elegí en el menu principal
-	if opcionElegida != 5 and opcionElegida != 6: # Si no es "Salir del programa" o "Ingresar al sistema"
+	if opcionElegida != 5 and opcionElegida != 6: # Si no es ni "Salir del programa" ni "Ingresar al sistema"
 		rangoSubmenuElegido = calcularRangoSubmenuElegido(opcionElegida)
 		opcionSubmenu = 0
 		while opcionSubmenu != rangoSubmenuElegido:
