@@ -147,7 +147,7 @@ def modificacion (usuarios):
 
 def imprimirUsuariosBloqueados (usuarios):
     cantidadUsuariosBloqueados = 0 #Indice para imprimir ordenado
-    print("**** Usuarios Bloqueados ****")
+    print("**** USUARIOS BLOQUEADOS ****")
     for usuario in usuarios:
         if usuarios[usuario][0] == "": #Filtro del diccionario los usarios bloqueados
             cantidadUsuariosBloqueados += 1
@@ -188,7 +188,7 @@ def menuUsuario(usuarios, bicicletas, estaciones, viajesEnCurso):
 			submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin, viajesEnCurso)
 
 def iniciarSesion(usuarios):
-	print("\n\n**** INICIAR SESIÓN *****")
+	print("\n\n**** INICIAR SESIÓN ****")
 	dni = input("[SOLICITUD] Ingrese su DNI: ")
 	if dni.isdigit() and int(dni) in usuarios:
 		if usuarios[int(dni)][0] == "":
@@ -243,7 +243,7 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, viajesEnCurso):
 				limpiarPantalla()
 				print ("\n[INFO] El usuario {} fue bloqueado porque excedió la cantidad de intentos permitidos.".format(usuarios[dni][1]))
 				return None
-		print("\n***** ESTACIONES *****")
+		print("\n**** ESTACIONES ****")
 		for estacion in estaciones:
 			print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
 		idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "\n[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
