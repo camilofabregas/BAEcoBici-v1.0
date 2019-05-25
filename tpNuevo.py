@@ -273,11 +273,19 @@ def devolverBicicleta(estaciones, dni, viajesEnCurso, usuarios, bicicletas):
         idEstacion = int(solicitarValidarDigitos(1, 10, "[SOLICITUD] Ingrese el número de la estación donde devolverá la bicicleta: "))
         while idEstacion not in estaciones:
             idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
-        if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
-        	print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
-        guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas)
+        verificarLugar(idEstacion, estaciones, viajesEnCurso, usuarios, dni, bicicletas)
 
-def guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas): #Ancla bicicleta a estación o la envía a reparar.
+def verificarLugar(idEstacion, estaciones, viajesEnCurso, usuarios, dni, bicicletas): #Se fija si hay lugar en la estación elegida para anclar la bici.
+	anclajesLibres = 0
+	for anclaje in estaciones[idEstacion]["Bicicletas"]:
+		if estaciones[idEstacion]["Bicicletas"][anclaje] == "":
+			anclajesLibres += 1
+	if len(estaciones[idEstacion]["Bicicletas"]) - anclajesLibres >= estaciones[idEstacion]["Capacidad"]:
+		print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
+	else:
+		guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas)
+
+def guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas): #Ancla bicicleta a estación elegida o la envía a reparar.
 	idBicicleta = viajesEnCurso[dni][0]
 	estadoBici = input("\n[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
 	if estadoBici == "s":
@@ -286,11 +294,12 @@ def guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicic
 		generarDuracionDeViaje(usuarios, dni)
 		print("[INFO] La bicicleta se enviará a reparación.")
 	else:
+		for anclaje in estaciones[idEstacion]["Bicicletas"]:
+			if estaciones[idEstacion]["Bicicletas"][anclaje] == "":
+				estaciones[idEstacion]["Bicicletas"][anclaje] = idBicicleta
+				break #Fue la única manera que se nos ocurrió para que la función haga lo que queríamos
 		bicicletas[idBicicleta][1] = "Anclada en estación"
 		del(viajesEnCurso[dni])
-		for anclaje in estaciones[idEstacion]["Bicicletas"]:
-			if anclaje == "":
-				estaciones[idEstacion]["Bicicletas"][anclaje] = idBicicleta
 		generarDuracionDeViaje(usuarios, dni)
 
 def generarDuracionDeViaje(usuarios, dni):
