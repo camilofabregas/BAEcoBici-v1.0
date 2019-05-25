@@ -25,7 +25,7 @@ def generarEstaciones(estaciones, bicicletas, tipoDeCarga):
 	for dato1, dato2, dato3, dato4, dato5 in zip(identificador, direcciones, latitudLongitud, anclajesTotales, anclajesOcupados):
 		estaciones[dato1] = {"Dirección": dato2, "Latitud y longitud": dato3, "Capacidad": dato4, "Bicicletas": dato5}
 
-def distribuirBicicletas(anclajes, tipoDeCarga):
+def distribuirBicicletas(anclajesTotales, tipoDeCarga):
 	distribucionAnclajes = [22, 15, 27, 24, 22, 29, 24, 28, 19, 30] # Cuantas bicis habrá por estación
 	idBicis = list(range(1000, 1240))
 	if tipoDeCarga == "aleatoria":
@@ -34,8 +34,14 @@ def distribuirBicicletas(anclajes, tipoDeCarga):
 	for i in distribucionAnclajes:
 		distribucionPorEstacion = {}
 		bicisPorEstacion = [x for x in idBicis if idBicis.index(x) < i]
+		bicisPorEstacion += ["" for x in range(i, anclajesTotales[distribucionAnclajes.index(i)])]
 		for bici in bicisPorEstacion:
-			idBicis.remove(bici)
-			distribucionPorEstacion[bicisPorEstacion.index(bici)+1] = bici
+			if bici in idBicis:
+				idBicis.remove(bici)
+			if bici == "":
+				cont = len(distribucionPorEstacion)+1
+				distribucionPorEstacion[cont] = bici
+			else:
+				distribucionPorEstacion[bicisPorEstacion.index(bici)+1] = bici
 		distribuciones.append(distribucionPorEstacion)
 	return distribuciones
