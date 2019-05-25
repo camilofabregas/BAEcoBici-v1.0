@@ -228,10 +228,9 @@ def cambiarPin(usuarios, dni, pinViejo):
 	limpiarPantalla()
 	print("\n[INFO] El PIN fue cambiado con éxito.")
 
-def retirarBicicleta (usuarios, bicicletas, estaciones, dni, viajesEnCurso):
+def retirarBicicleta (usuarios, bicicletas, estaciones, dni, viajesEnCurso):# Verifica que el usuario no esté en viaje ni bloqueado y pide el PIN.
 	if dni in viajesEnCurso or usuarios[dni][0] == "":
 		print("[ERROR] El usuario {} está bloqueado o actualmente se encuentra en viaje.".format(usuarios[dni][0]))
-		return None
 	else:
 		contador = 4
 		pin = input("\n[SOLICITUD] Ingrese su numero de PIN: ")
@@ -242,26 +241,32 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, viajesEnCurso):
 				usuarios[dni][0] = ""
 				limpiarPantalla()
 				print ("\n[INFO] El usuario {} fue bloqueado porque excedió la cantidad de intentos permitidos.".format(usuarios[dni][1]))
-				return None
-		print("\n**** ESTACIONES ****")
-		for estacion in estaciones:
-			print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
-		idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "\n[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
-		while idEstacion not in estaciones or len(estaciones[idEstacion]["Bicicletas"]) == 0:
-			print("\n[ERROR] El número de estación ingresado es inválido o la estación se encuentra sin bicicletas.")
-			idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
+		elegirEstacionParaRetirar(estaciones, bicicletas, viajesEnCurso, dni)
+
+def elegirEstacionParaRetirar(estaciones, bicicletas, viajesEnCurso, dni):
+	print("\n**** ESTACIONES ****")
+	for estacion in estaciones:
+		print("Estación {}: {}".format(estacion, estaciones[estacion]["Dirección"]))
+	idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "\n[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
+	while idEstacion not in estaciones or len(estaciones[idEstacion]["Bicicletas"]) == 0:
+		print("\n[ERROR] El número de estación ingresado es inválido o la estación se encuentra sin bicicletas.")
+		idEstacion = int(solicitarValidarDigitos(1, len(estaciones), "[SOLICITUD] Ingrese el numero de identificacion de la estacion donde desea retirar la bicicleta: "))
+	asignarBicicleta(estaciones, bicicletas, viajesEnCurso, idEstacion, dni)
+
+def asignarBicicleta(estaciones, bicicletas, viajesEnCurso, idEstacion, dni):
+	anclajeParaRetirar = random.randrange(1,len(estaciones[idEstacion]["Bicicletas"]))
+	while estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar] == "":
 		anclajeParaRetirar = random.randrange(1,len(estaciones[idEstacion]["Bicicletas"]))
-		bicicletaRetirada = estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar]
-		limpiarPantalla()
-		print("\n[EXITO] Acerquese al anclaje {} y retire la bicicleta {}.\n".format(anclajeParaRetirar,bicicletaRetirada))
-		estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar] = ""
+	bicicletaRetirada = estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar]
+	limpiarPantalla()
+	print("\n[EXITO] Acerquese al anclaje {} y retire la bicicleta {}.\n".format(anclajeParaRetirar,bicicletaRetirada))
+	estaciones[idEstacion]["Bicicletas"][anclajeParaRetirar] = ""
+	horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
+	while (horas == 22) and (minutos > 44):
 		horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
-		while (horas == 22) and (minutos > 44):
-			horas, minutos, segundos = horarios (0, 0, 0, 23, 60, 60)
-		horarioSalida = time(horas, minutos, segundos)
-		bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
+	horarioSalida = time(horas, minutos, segundos)
+	bicicletas[bicicletaRetirada] = ["En condiciones", "En circulacion"]
 	viajesEnCurso[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
-	print(viajesEnCurso)
 		
 def devolverBicicleta(estaciones, dni, viajesEnCurso, usuarios, bicicletas):
     if dni not in viajesEnCurso:
