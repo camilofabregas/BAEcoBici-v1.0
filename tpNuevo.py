@@ -212,7 +212,7 @@ def submenuUsuario(usuarios, bicicletas, estaciones, opcionElegida, dni, pin, vi
 	elif opcionElegida == 2:
 		retirarBicicleta(usuarios, bicicletas, estaciones, dni, viajesEnCurso)
 	elif opcionElegida == 3:
-		devolverBicicleta(estaciones, bicicletas, usuarios, dni, viajesEnCurso)
+		devolverBicicleta(estaciones, dni, viajesEnCurso, usuarios, bicicletas)
 
 def cambiarPin(usuarios, dni, pinViejo):
 	print("\n")
@@ -263,7 +263,7 @@ def retirarBicicleta (usuarios, bicicletas, estaciones, dni, viajesEnCurso):
 	viajesEnCurso[dni] = [bicicletaRetirada, estaciones[idEstacion]["Dirección"], horarioSalida]
 	print(viajesEnCurso)
 		
-def devolverBicicleta(estaciones, bicicletas, usuarios, dni, viajesEnCurso):
+def devolverBicicleta(estaciones, dni, viajesEnCurso, usuarios, bicicletas):
     if dni not in viajesEnCurso:
         print("\n[INFO] Usted no ha retirado una bicicleta. Volviendo al submenu...")
     else:
@@ -274,33 +274,34 @@ def devolverBicicleta(estaciones, bicicletas, usuarios, dni, viajesEnCurso):
         while idEstacion not in estaciones:
             idEstacion = int(solicitarValidarDigitos(1, 10, "[ERROR]Ingrese un número de estación válido: "))
         if len(estaciones[idEstacion]["Bicicletas"]) >= estaciones[idEstacion]["Capacidad"]:
-            print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
-        else:
-            idBicicleta = viajesEnCurso[dni][0]
-            bicicletas[idBicicleta][0] = "Anclada en estación"
-            estadoBici = input("\n[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
-            if estadoBici == "s":
-                bicicletas[idBicicleta][0] = "Necesita reparación"
-                bicicletas[idBicicleta][1] = "En reparación"
-                print("[INFO] La bicicleta se enviará a reparación.")
-            generarDuracionDeViaje(usuarios, dni)
-            del(viajesEnCurso[dni])
+        	print("[INFO] No hay lugar en esta estación para anclar su bicicleta. Por favor diríjase hacia otra estación.")
+        guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas)
+
+def guardarBicicleta(idEstacion, viajesEnCurso, usuarios, dni, estaciones, bicicletas): #Ancla bicicleta a estación o la envía a reparar.
+	idBicicleta = viajesEnCurso[dni][0]
+	estadoBici = input("\n[SOLICITUD] ¿Necesita reparación la bicicleta? s/n: ")
+	if estadoBici == "s":
+		bicicletas[idBicicleta][0] = "Necesita reparación"
+		bicicletas[idBicicleta][1] = "En reparación"
+		generarDuracionDeViaje(usuarios, dni)
+		print("[INFO] La bicicleta se enviará a reparación.")
+	else:
+		bicicletas[idBicicleta][1] = "Anclada en estación"
+		del(viajesEnCurso[dni])
+		for anclaje in estaciones[idEstacion]["Bicicletas"]:
+			if anclaje == "":
+				estaciones[idEstacion]["Bicicletas"][anclaje] = idBicicleta
+		generarDuracionDeViaje(usuarios, dni)
 
 def generarDuracionDeViaje(usuarios, dni):
-    num = random.choice('0123456789')
-    num2 = random.choice('0123456789')
-    duracionViaje = num + num2
-    while int(duracionViaje) < 5 or int(duracionViaje) > 75:
-    	num = random.choice('0123456789')
-    	num2 = random.choice('0123456789')
-    	duracionViaje = num + num2
-    if int(duracionViaje) > 60:
+    duracionViaje = random.randrange(5,76)
+    if duracionViaje > 60:
     	limpiarPantalla()
     	print("\n[INFO] Su viaje exedió el límite de una hora. Su usuario ha sido bloqueado.")
     	usuarios[dni][0] = ""
     else:
     	limpiarPantalla()
-    	print("\n[INFO] Su viaje duró {} minutos.".format(int(duracionViaje)))
+    	print("\n[INFO] Su viaje duró {} minutos.".format(duracionViaje))
 	
 def horarios (horaMinimo, minutosMinimo, segundosMinimo, horaMaximo, minutosMaximo, segundosMaximo):
 		horas = random.randrange(horaMinimo, horaMaximo)
