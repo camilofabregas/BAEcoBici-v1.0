@@ -416,7 +416,7 @@ def acumularViajes(usuario, viajesFinalizados, bicicletaAsignada, estacionRetira
 
 def viajesAleatoriosMultiples(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados):
 	cantidad = ingresarEntreRangos(1, 100, "Ingrese entre 1 y 100 la cantidad de viajes aleatorios que desea generar: ")
-	for viaje in range(cantidad-1):
+	for viaje in range(cantidad):
 		viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados)
 		if viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados) == "None":
 			return print("[INFO] No hay mas usuarios disponibles. Se encuentran todos en viaje o bloqueados.")
