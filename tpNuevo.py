@@ -118,32 +118,41 @@ def modificacion (usuarios):
 			dni = input("\n[SOLICITUD] Ingrese el DNI: ")
 			if dni.isdigit() and int(dni) in usuarios:
 				dni = int(dni)
-				if opcionElegida == 1:
-					pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
-					while usuarios[dni][0] != pin:
-						print("\n[ERROR] El PIN ingresado no es correcto")
-						pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
-					limpiarPantalla()
-					cambiarPin(usuarios, dni, pin)
-				elif opcionElegida == 2:
-					nombre = solicitarValidarDatos("[SOLICITUD] Ingrese su nombre: ")
-					apellido = solicitarValidarDatos("[SOLICITUD] Ingrese su apellido: ")
-					usuarios[dni][1] = nombre + "_" + apellido
-					print ("[INFO] Nombre y apellido del usuario {} fue cambiado con éxito.".format(dni))
-				elif opcionElegida == 3:
-					celular = solicitarValidarCelular()
-					usuarios [dni][2] = celular
-					print ("[INFO] Celular del usuario {} cambiado con exito.".format(dni))
-				elif opcionElegida == 4:
-					confirmacion = input("El usuario de DNI {} será eliminado. ¿Desea confirmar? s/n: ".format(dni))
-					if confirmacion == "s":
-						del usuarios[dni]
-						print("[INFO] El usuario {} fue eliminado con éxito.".format(dni))
-					else:
-						print ("[INFO] Operacion cancelada. Volviendo al menu de modificación...\n")
+				modificarPin(opcionElegida, usuarios, dni)
+				modificarNomApe(opcionElegida, usuarios, dni)
+				modificarCelular(opcionElegida, usuarios, dni)
+				eliminarUsuario(opcionElegida, usuarios, dni)
 			else:
 				limpiarPantalla()
-				print ("\n[ERROR] El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificación... \n")
+				print ("\n[ERROR] El DNI ingresado no se encuentra en el sistema. Volviendo al menu de modificación... \n")	
+
+def modificarPin(opcionElegida, usuarios, dni):
+	if opcionElegida == 1:
+		pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
+		while usuarios[dni][0] != pin:
+			print("\n[ERROR] El PIN ingresado no es correcto")
+			pin = input("[SOLICITUD] Ingrese el PIN asociado: ")
+		limpiarPantalla()
+		cambiarPin(usuarios, dni, pin)
+def modificarNomApe(opcionElegida, usuarios, dni):
+	if opcionElegida == 2:
+		nombre = solicitarValidarDatos("[SOLICITUD] Ingrese su nombre: ")
+		apellido = solicitarValidarDatos("[SOLICITUD] Ingrese su apellido: ")
+		usuarios[dni][1] = nombre + "_" + apellido
+		print ("[INFO] Nombre y apellido del usuario {} fue cambiado con éxito.".format(dni))
+def modificarCelular(opcionElegida, usuarios, dni):
+	if opcionElegida == 3:
+		celular = solicitarValidarCelular()
+		usuarios [dni][2] = celular
+		print ("[INFO] Celular del usuario {} cambiado con exito.".format(dni))
+def eliminarUsuario(opcionElegida, usuarios, dni):
+	if opcionElegida == 4:
+		confirmacion = input("El usuario de DNI {} será eliminado. ¿Desea confirmar? s/n: ".format(dni))
+		if confirmacion == "s":
+			del usuarios[dni]
+			print("[INFO] El usuario {} fue eliminado con éxito.".format(dni))
+		else:
+			print ("[INFO] Operacion cancelada. Volviendo al menu de modificación...\n")
 
 def imprimirUsuariosBloqueados (usuarios):
     cantidadUsuariosBloqueados = 0 #Indice para imprimir ordenado
