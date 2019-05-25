@@ -404,15 +404,17 @@ def devolucionAleatoriaBicicleta(estaciones, bici, estacionRetirar):
                 return estacion
 
 def bloqueoExcesoHorario(usuarios, duracionViaje, usuario):
-    if duracionViaje[0] == 1 and duracionViaje[1] >= 0:
-        usuarios[usuario][0] = ""
-        print("Al exceder los 60 minutos de uso ha sido bloqueado")
+	if duracionViaje[0] == 1 and duracionViaje[1] >= 0:
+		usuarios[usuario][0] = ""
+		print("Al exceder los 60 minutos de uso ha sido bloqueado")
 
 def acumularViajes(usuario, viajesFinalizados, bicicletaAsignada, estacionRetirar, estacionDevolver, horarioSalida, horarioLlegada):
-    if usuario not in viajesFinalizados:
-        viajesFinalizados[usuario] = [(bicicletaAsignada, estacionRetirar, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]), estacionDevolver,str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]))]
-    else:
-        viajesFinalizados[usuario].append((bicicletaAsignada, estacionRetirar, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]), estacionDevolver, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2])))
+	horaSalida, minSalida, segSalida = horarioSalida
+	horaLlegada, minLlegada, segLlegada = horarioLlegada
+	if usuario not in viajesFinalizados:
+		viajesFinalizados[usuario] = [(bicicletaAsignada, estacionRetirar, time(horaSalida, minSalida, segSalida), estacionDevolver, time(horaLlegada, minLlegada, segLlegada))]
+	else:
+		viajesFinalizados[usuario].append((bicicletaAsignada, estacionRetirar, time(horaSalida, minSalida, segSalida), estacionDevolver, time(horaLlegada, minLlegada, segLlegada)))
 
 def viajesAleatoriosMultiples(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados):
 	cantidad = ingresarEntreRangos(1, 100, "Ingrese entre 1 y 100 la cantidad de viajes aleatorios que desea generar: ")
