@@ -1,7 +1,6 @@
 from imprimirMenus import *
 from generarEstructuras import *
 from validaciones import *
-from viajeAleatorio import *
 import random
 import datetime
 import os
@@ -370,56 +369,68 @@ def estacionesMasActivas(estaciones, viajesFinalizados):
 		print("Estacion {} con {} retiros y devoluciones.".format(estaciones[0], estaciones[1]))
 
 def viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados):
-    usuariosDisponibles = [usuario for usuario in usuarios if usuarios[usuario][0] != "" and usuario not in usuariosEnViaje]
-    if usuariosDisponibles:
-        usuario = random.choice(usuariosDisponibles)
-        estacionRetirar = random.randrange(1, 11)
-        while len(estaciones[estacionRetirar]["Bicicletas"]) == 0:
-            estacionRetirar = random.randrange(1, 11)
-        anclajesDisponibles = list(estaciones[estacionRetirar]["Bicicletas"].keys())
-        anclajeAsignado = random.choice(anclajesDisponibles)
-        bicicletaAsignada = estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado]
-        while bicicletas[bicicletaAsignada] == ["Necesita reparación", "En reparación"]:
-            anclajeAsignado = random.choice(anclajesDisponibles)
-            bicicletaAsignada = estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado]
-        del estaciones[estacionRetirar]["Bicicletas"][anclajeAsignado]
-        horaSalida, minSalida, segSalida = horarios(0, 0, 0, 23, 60, 60)
-        while horaSalida == 22 and minSalida > 29:
-            horaSalida, minSalida, segSalida = horarios(0, 0, 0, 23, 60, 60)
-        print("\n{} retiró la bicicleta {} de la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionRetirar, estaciones[estacionRetirar]["Dirección"], time(horaSalida, minSalida, segSalida)))
-        estacionDevolver = random.randrange(1, 11)
-        while estacionDevolver == estacionRetirar or len(estaciones[estacionDevolver]["Bicicletas"]) == estaciones[estacionDevolver]["Capacidad"]:
-            estacionDevolver = random.randrange(1, 11)
-        horaViaje, minViaje, segViaje = horarios(0, 0, 0, 2, 30, 60)  # maximo 90 minutos que equivale a 1:30:00hs
-        horaLlegada, minLlegada, segLlegada = calcularHoraLlegada(horaSalida, minSalida, segSalida, horaViaje, minViaje, segViaje)
-        print("{} devolvió la bicicleta {} en la estación N°{} de {} a las {}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionDevolver, estaciones[estacionDevolver]["Dirección"], time(horaLlegada, minLlegada, segLlegada)))
-        if horaViaje == 1 and minViaje >= 0:
-            usuarios[usuario][0] = ""
-            print("Al exceder los 60 minutos de uso ha sido bloqueado")
-        if usuario not in viajesFinalizados:
-            viajesFinalizados[usuario] = [(bicicletaAsignada, estacionRetirar, time(horaSalida, minSalida, segSalida), estacionDevolver, time(horaLlegada, minLlegada, segLlegada))]
-        elif usuario in viajesFinalizados:  # acumula los viajes de un mismo usuario
-            viajesFinalizados[usuario].append((bicicletaAsignada, estacionRetirar, time(horaSalida, minSalida, segSalida) , estacionDevolver, time(horaLlegada, minLlegada, segLlegada)))  # no me funciona el time()
-    else:
-        return "None"
+	usuariosDisponibles = [usuario for usuario in usuarios if usuarios[usuario][0] != "" and usuario not in usuariosEnViaje]
+	if usuariosDisponibles:
+		usuario = random.choice(usuariosDisponibles)
+		estacionRetirar, bicicletaAsignada = retiroAleatorioBicicleta(estaciones, bicicletas)
+		horarioSalida = horarios(0, 0, 0, 23, 30, 60)
+		print("\n{} retiró la bicicleta {} de la estación N°{} de {} a las {}:{}:{}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionRetirar, estaciones[estacionRetirar]["Dirección"], horarioSalida[0], horarioSalida[1], horarioSalida[2]))
+		estacionDevolver = devolucionAleatoriaBicicleta(estaciones, bicicletaAsignada, estacionRetirar)
+		duracionViaje = horarios(0, 0, 0, 2, 30, 60)  # maximo 90 minutos que equivale a 1:30:00hs
+		horarioLlegada = calcularHoraLlegada(horarioSalida, duracionViaje)
+		print("{} devolvió la bicicleta {} en la estación N°{} de {} a las {}:{}:{}hs".format(usuarios[usuario][1], bicicletaAsignada, estacionDevolver, estaciones[estacionDevolver]["Dirección"], horarioLlegada[0], horarioLlegada[1], horarioLlegada[2]))
+		bloqueoExcesoHorario(usuarios, duracionViaje, usuario)
+		acumularViajes(usuario, viajesFinalizados, bicicletaAsignada, estacionRetirar, estacionDevolver, horarioSalida, horarioLlegada)
+	else:
+		return "None"
 
-def calcularHoraLlegada(horas, minutos, segundos, horaViaje, minViaje, segViaje):
-    horaLlegada = horas + horaViaje
-    minLlegada = minutos + minViaje
-    segLlegada = segundos + segViaje
-    if segLlegada >= 60:
-        segLlegada = segLlegada - 60
-        minLlegada += 1
-    if minLlegada >= 60:
-        minLlegada = minLlegada - 60
-        horaLlegada +=1
-    return (horaLlegada, minLlegada, segLlegada)
+def retiroAleatorioBicicleta(estaciones, bicicletas):
+    bicicletaAsignada = ""
+    while not bicicletaAsignada:
+        estacionRetirar = random.randrange(1, 11)
+        for anclaje in estaciones[estacionRetirar]["Bicicletas"]:
+            bici = estaciones[estacionRetirar]["Bicicletas"][anclaje]
+            if bici and bicicletas[bici][0] != "Necesita reparación":
+                estaciones[estacionRetirar]["Bicicletas"][anclaje] = ""
+                return estacionRetirar, bici
+
+def devolucionAleatoriaBicicleta(estaciones, bici, estacionRetirar):
+    estacionDevolver = estacionRetirar
+    while estacionDevolver == estacionRetirar:
+        estacion = random.randrange(1, 11)
+        for anclaje in estaciones[estacion]["Bicicletas"]:
+            if estaciones[estacion]["Bicicletas"][anclaje] == "":
+                estaciones[estacion]["Bicicletas"][anclaje] = bici
+                return estacion
+
+def bloqueoExcesoHorario(usuarios, duracionViaje, usuario):
+    if duracionViaje[0] == 1 and duracionViaje[1] >= 0:
+        usuarios[usuario][0] = ""
+        print("Al exceder los 60 minutos de uso ha sido bloqueado")
+
+def acumularViajes(usuario, viajesFinalizados, bicicletaAsignada, estacionRetirar, estacionDevolver, horarioSalida, horarioLlegada):
+    if usuario not in viajesFinalizados:
+        viajesFinalizados[usuario] = [(bicicletaAsignada, estacionRetirar, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]), estacionDevolver,str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]))]
+    else:
+        viajesFinalizados[usuario].append((bicicletaAsignada, estacionRetirar, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2]), estacionDevolver, str(horarioLlegada[0])+":"+str(horarioLlegada[1])+":"+str(horarioLlegada[2])))
 
 def viajesAleatoriosMultiples(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados):
-    cantidad = ingresarEntreRangos(1, 100, "Ingrese entre 1 y 100 la cantidad de viajes aleatorios que desea generar: ")
-    for viaje in range(cantidad):
-        viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados)
-        if viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados) == "None":
-            return print("[INFO] No hay mas usuarios disponibles. Se encuentran todos en viaje o bloqueados.")
+	cantidad = ingresarEntreRangos(1, 100, "Ingrese entre 1 y 100 la cantidad de viajes aleatorios que desea generar: ")
+	for viaje in range(cantidad-1):
+		viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados)
+		if viajeAleatorio(usuarios, bicicletas, estaciones, usuariosEnViaje, viajesFinalizados) == "None":
+			return print("[INFO] No hay mas usuarios disponibles. Se encuentran todos en viaje o bloqueados.")
+
+def calcularHoraLlegada(horarioSalida, duracionViaje):
+	horaLlegada = horarioSalida[0] + duracionViaje[0]
+	minLlegada = horarioSalida[1] + duracionViaje[1]
+	segLlegada = horarioSalida[2] + duracionViaje[2]
+	if segLlegada >= 60:
+		segLlegada = segLlegada - 60
+		minLlegada += 1
+	if minLlegada >= 60:
+		minLlegada = minLlegada - 60
+		horaLlegada +=1
+	return (horaLlegada, minLlegada, segLlegada)
 
 main()
