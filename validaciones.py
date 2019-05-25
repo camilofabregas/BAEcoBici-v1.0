@@ -17,14 +17,17 @@ def solicitarValidarDatos(msj):
 
 def solicitarValidarCelular():
 	digitos = []
+	caracteresEspeciales = ["(",")","+","-"," "," "," "," "]
 	valido = True
 	while len(digitos) < 8 or valido == False:
-        	digitos = []
-        	valido = True
-        	celular = input("Ingrese celular pudiendo utilizar '()+-' como caracteres adicionales: ")
-        	for caracter in celular:
-            		if caracter.isdigit():
-                		digitos.append(caracter)
-            		elif caracter not in '()+-':
-                		valido = False
+		digitos = []
+		valido = True
+		celular = input("Ingrese celular pudiendo utilizar '()+-' como caracteres adicionales: ")
+		for caracter in celular:
+			if caracter.isdigit():
+				digitos.append(caracter)
+			elif caracter in caracteresEspeciales:
+				caracteresEspeciales.remove(caracter)
+			else:
+				valido = False
 	return celular
