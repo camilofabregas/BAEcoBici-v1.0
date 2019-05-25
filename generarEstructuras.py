@@ -1,3 +1,5 @@
+import random
+
 def generarUsuarios(usuarios):
 	if usuarios:
 		usuarios.clear()
